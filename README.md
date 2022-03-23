@@ -4,7 +4,8 @@
   - [Idée principale (résumé)](#idée-principale-résumé)
   - [Tâches principales](#tâches-principales)
   - [Technologies](#technologies)
-  - [Base de donnée](#base-de-donnée)
+  - [Base de donnée (Pour l'instant)](#base-de-donnée-pour-linstant)
+  - [Crédits](#crédits)
 
 ## Idée principale (résumé)
 
@@ -35,9 +36,22 @@ D'autre fonctionnalités sont à prévoir comme le partage de certains blocs/com
     Node.JS, ExpressJS, SQLite et DiscordJS
 
 - Frontend :
-    HTML, CSS (Obvious), Tailwindcss et ReactJS
+    HTML, CSS (Obvious), Tailwindcss et ReactJS ou/et AplineJS
 
 ---
 
-## Base de donnée
+## Base de donnée (Pour l'instant)
 
+| **User** | **Bloc**    | **Upvote** | **Downvote** | **Comments** |
+|----------|-------------|------------|--------------|--------------|
+| Id       | Id          | Id         | Id           | Id           |
+| Username | UserId      | UserId     | UserId       | UserId       |
+| Email    | Content     | BlocId     | BlocId       | Content      |
+| Admin    | BlocContent | --         | --           | BlocId       |
+| Badges   | --          | --         | --           | --           |
+
+---
+
+## Crédits
+
+Valentin DAUTREMENT.
