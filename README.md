@@ -5,6 +5,7 @@
   - [Tâches principales](#tâches-principales)
   - [Technologies](#technologies)
   - [Base de donnée (Pour l'instant)](#base-de-donnée-pour-linstant)
+  - [Modèle de donnée](#modèle-de-donnée)
   - [Crédits](#crédits)
 
 ## Idée principale (résumé)
@@ -52,6 +53,12 @@ Total de points : `33 pts`
 | Email    | Content     | BlocId     | BlocId       | Content      |
 | Roles    | BlocContent | --         | --           | BlocId       |
 | Badges   | --          | --         | --           | --           |
+
+---
+
+## Modèle de donnée
+
+![Schema de donnée](https://i.imgur.com/GhxRSKb.png)
 
 ---
 
