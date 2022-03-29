@@ -9,6 +9,8 @@
   "author": "Lack_off1",
   "license": "GPL-3.0",
   "dependencies": {
-    "express": "^4.17.3"
+    "express": "^4.17.3",
+    "express-session": "^1.17.2",
+    "mysql": "^2.18.1"
   }
 }

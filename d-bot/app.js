@@ -7,6 +7,16 @@ var livereload = require("livereload");
 var connectLiveReload = require("connect-livereload");
 
 var indexRouter = require('./routes/index');
+var loginRouter = require('./routes/login');
+var registerRouter = require('./routes/register');
+var logoutRouter = require('./routes/logout');
+var adminRouter = require('./routes/dashboard');
+var profileRouter = require('./routes/profile');
+var editProfileRouter = require('./routes/editProfile');
+var createBlockRouter = require('./routes/createBlock');
+var allBlocksRouter = require('./routes/allBlocks');
+var blockRouter = require('./routes/block');
+var editBlockRouter = require('./routes/editBlock');
 var usersRouter = require('./routes/users');
 
 const liveReloadServer = livereload.createServer();
@@ -32,6 +42,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/login', loginRouter);
+app.use('/register', registerRouter);
+app.use('/logout', logoutRouter);
+app.use('/dashboard', adminRouter);
+app.use('/profile', profileRouter);
+app.use('/editProfile', editProfileRouter);
+app.use('/createBlock', createBlockRouter);
+app.use('/allBlocks', allBlocksRouter);
+app.use('/block', blockRouter);
+app.use('/editBlock', editBlockRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

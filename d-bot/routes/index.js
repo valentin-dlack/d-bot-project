@@ -7,6 +7,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
+  console.log(req.body.mail)
   res.render('index', { title: 'Express', mail: req.body.mail });
 });
 
