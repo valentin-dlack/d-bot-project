@@ -37,7 +37,7 @@ Total de points : `33 pts`
 ## Technologies
 
 - Backend :
-    Node.JS, ExpressJS, SQLite et DiscordJS
+    Node.JS, ExpressJS, MySQL et DiscordJS
 
 - Frontend :
     HTML, CSS (Obvious), Tailwindcss et ReactJS ou/et AplineJS
