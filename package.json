@@ -1,0 +1,14 @@
+{
+  "name": "d-bot",
+  "version": "1.0.0",
+  "description": "Website for bots",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Lack_off1",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}
