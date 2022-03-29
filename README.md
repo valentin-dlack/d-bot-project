@@ -17,16 +17,16 @@ D'autre fonctionnalités sont à prévoir comme le partage de certains blocs/com
 ## Tâches principales
 
 - [X] Setup le github
-- [ ] Faire le squelette du site
-- [ ] Schéma de la BDD (UML)
-- [ ] Création du site web de base (routing, ect. NoCSS)
-- [ ] Login/Register + Login avec les sites tiers
-- [ ] HomePage, ProfilePage, AdminPage
-- [ ] Page de création *formulaires* (Seulement fonctionnel)
-- [ ] Export en ZIP
-- [ ] Style général du site
-- [ ] Partage des blocs crées par la commu (donc système de sauvegarde)
-- [ ] Intégration du style scratch
+- [ ] Faire le squelette du site - 1 pts
+- [ ] Schéma de la BDD (UML) - 1 pts
+- [ ] Création du site web de base (routing, ect. No CSS) - 2 pts
+- [ ] Login/Register + Login avec les sites tiers - 3 pts
+- [ ] HomePage, ProfilePage, AdminPage - 2 pts
+- [ ] Page de création *formulaires* (Seulement fonctionnel) - 3 pts
+- [ ] Export en ZIP - 4 pts
+- [ ] Style général du site - 2 pts
+- [ ] Partage des blocs crées par la commu (donc système de sauvegarde/CRUD) - 4 pts
+- [ ] Intégration du style scratch - 6 pts
 
 ---
 
