@@ -50,7 +50,7 @@ Total de points : `33 pts`
 | Id       | Id          | Id         | Id           | Id           |
 | Username | UserId      | UserId     | UserId       | UserId       |
 | Email    | Content     | BlocId     | BlocId       | Content      |
-| Admin    | BlocContent | --         | --           | BlocId       |
+| Roles    | BlocContent | --         | --           | BlocId       |
 | Badges   | --          | --         | --           | --           |
 
 ---
