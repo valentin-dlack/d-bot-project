@@ -5,7 +5,9 @@
   <p class="text-white text-xl">Login page</p>
   <form action="" method="post">
     <input class="px-4 py-2 rounded-md" placeholder="Your Email" type="email" name="mail" id="mail" required/>
+    <input class="px-4 py-2 rounded-md" placeholder="Your Password" type="password" name="password" id="password" required/>
     <button class="px-4 py-2 rounded-md bg-blue-400 text-white hover:bg-blue-600" type="submit">Submit !</button>
   </form>
+  <p class="text-red-600">{{e_message}}</p>
   <p class="text-white font-bold">{{mail}}</p>
 {% endblock %}

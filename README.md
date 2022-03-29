@@ -58,7 +58,7 @@ Total de points : `33 pts`
 
 ## Modèle de donnée
 
-![Schema de donnée](https://i.imgur.com/GhxRSKb.png)
+![Schema de donnée](https://i.imgur.com/TzvILWX.png)
 
 ---
 
