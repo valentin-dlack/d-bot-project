@@ -18,10 +18,10 @@ D'autre fonctionnalités sont à prévoir comme le partage de certains blocs/com
 ## Tâches principales
 
 - [X] Setup le github
-- [ ] Faire le squelette du site
-- [ ] Schéma de la BDD (UML) - 5 pts (1 pts par table)
-- [ ] Création du site web de base (routing, ect. No CSS) - 1 pts
-- [ ] Mise en place et lien avec la BDD - 3 pts
+- [x] Faire le squelette du site
+- [x] Schéma de la BDD (UML) - 5 pts (1 pts par table)
+- [X] Création du site web de base (routing, ect. No CSS) - 1 pts
+- [X] Mise en place et lien avec la BDD - 3 pts
 - [ ] Login/Register + Login avec les sites tiers - 4 pts
 - [ ] HomePage, ProfilePage, AdminPage - 3 pts
 - [ ] Page de création *formulaires* (Seulement fonctionnel) - 4 pts
