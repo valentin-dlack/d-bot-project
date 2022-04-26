@@ -7,11 +7,15 @@
     "watch": "nodemon --ext js,twig,css"
   },
   "dependencies": {
+    "connect-flash": "^0.1.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
+    "express-mysql-session": "^2.1.7",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
+    "passport": "^0.5.2",
+    "passport-local": "^1.0.0",
     "tailwindcss": "^3.0.23",
     "twig": "~0.10.3"
   },

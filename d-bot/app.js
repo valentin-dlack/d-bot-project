@@ -1,24 +1,24 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var livereload = require("livereload");
-var connectLiveReload = require("connect-livereload");
+const createError = require('http-errors');
+const path = require('path');
+const logger = require('morgan');
+const livereload = require("livereload");
+const connectLiveReload = require("connect-livereload");
+
+const express = require('express');
 const session = require('express-session');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const mysql = require('mysql');
+const MySQLStore = require('express-mysql-session')(session);
+const passportConfig = require('./config/passport');
+const flash = require('connect-flash');
+
+var app = express();
 
 var indexRouter = require('./routes/index');
-var loginRouter = require('./routes/login');
-var registerRouter = require('./routes/register');
-var logoutRouter = require('./routes/logout');
-var adminRouter = require('./routes/dashboard');
-var profileRouter = require('./routes/profile');
-var editProfileRouter = require('./routes/editProfile');
-var createBlockRouter = require('./routes/createBlock');
-var allBlocksRouter = require('./routes/allBlocks');
-var blockRouter = require('./routes/block');
-var editBlockRouter = require('./routes/editBlock');
 var usersRouter = require('./routes/users');
+
+passportConfig(passport);
 
 const liveReloadServer = livereload.createServer();
 liveReloadServer.server.once("connection", () => {
@@ -27,39 +27,57 @@ liveReloadServer.server.once("connection", () => {
   }, 100);
 });
 
-var app = express();
+app.use(session({
+  key: 'session_cookie_name',
+  secret: 'session_cookie_secret',
+  store: new MySQLStore({
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: 'root',
+    database: 'dbot'
+  }),
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 // 1 day
+  }
+}));
+
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(express.json());
+app.use(express.urlencoded({
+  extended: true
+}));
 
 app.use(connectLiveReload());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'twig');
-
-app.use(logger('dev'));
-app.use(session({
-  secret: 'secr3t',
-  resave: true,
-  saveUninitialized: true,
-}));
-app.use(express.json());
-app.use(express.urlencoded({
-  extended: false
-}));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(logger('dev'));
+
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'root',
+  database: 'dbot',
+  multipleStatements: true,
+});
+connection.connect((err) => {
+  if (!err) {
+    console.log('DB connection succeded.');
+  } else {
+    console.log('DB connection failed \n Error : ' + JSON.stringify(err, undefined, 2));
+  }
+});
+
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/login', loginRouter);
-app.use('/register', registerRouter);
-app.use('/logout', logoutRouter);
-app.use('/dashboard', adminRouter);
-app.use('/profile', profileRouter);
-app.use('/editProfile', editProfileRouter);
-app.use('/createBlock', createBlockRouter);
-app.use('/allBlocks', allBlocksRouter);
-app.use('/block', blockRouter);
-app.use('/editBlock', editBlockRouter);
+app.use('/', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

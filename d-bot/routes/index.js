@@ -1,14 +1,20 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const mysql = require('mysql');
+const session = require('express-session');
+const router = express.Router();
+
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'root',
+    database: 'dbot'
+});
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
-
-router.post('/', function(req, res, next) {
-  console.log(req.body.mail)
-  res.render('index', { title: 'Express', mail: req.body.mail });
+    res.render('index', { 
+      user: req.user,
+    });
 });
 
 module.exports = router;
