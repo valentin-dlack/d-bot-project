@@ -22,7 +22,7 @@ D'autre fonctionnalités sont à prévoir comme le partage de certains blocs/com
 - [x] Schéma de la BDD (UML) - 5 pts (1 pts par table)
 - [X] Création du site web de base (routing, ect. No CSS) - 1 pts
 - [X] Mise en place et lien avec la BDD - 3 pts
-- [ ] Login/Register + Login avec les sites tiers - 4 pts
+- [X] Login/Register + ~~Login avec les sites tiers~~ - 4 pts
 - [ ] HomePage, ProfilePage, AdminPage - 3 pts
 - [ ] Page de création *formulaires* (Seulement fonctionnel) - 4 pts
 - [ ] Export en ZIP - 3 pts
