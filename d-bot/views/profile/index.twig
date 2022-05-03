@@ -1,0 +1,11 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+  <h1>heh</h1>
+  <p class="text-white text-xl">Welcome to your profile {{user.username}}</p>
+  <!-- list of roles -->
+    <ul>
+        {{ user.roles }}
+    </ul>
+  
+{% endblock %}

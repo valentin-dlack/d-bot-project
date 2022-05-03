@@ -1,9 +1,7 @@
 var express = require('express');
 const mysql = require('mysql');
 const passport = require('passport');
-const session = require('express-session');
 const bcrypt = require('bcrypt');
-const app = require('../app');
 var router = express.Router();
 
 const connection = mysql.createConnection({
@@ -75,10 +73,6 @@ router.post('/login', (req, res, next) => {
 router.get('/logout', (req, res) => {
   req.logout();
   res.redirect('/');
-})
-
-router.get('/profile', isAuthenticated, (req, res) => {
-  res.send('<h1> Profile </h1>');
 })
 
 function isAuthenticated(req, res, next) {

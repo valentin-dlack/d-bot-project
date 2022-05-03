@@ -44,6 +44,10 @@ app.use(session({
   }
 }));
 
+console.log(path.join(__dirname, 'public'));
+
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
@@ -57,7 +61,6 @@ app.use(connectLiveReload());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'twig');
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(logger('dev'));
 
@@ -78,6 +81,8 @@ connection.connect((err) => {
 
 app.use('/', indexRouter);
 app.use('/', usersRouter);
+app.use('/profile', require('./routes/profile'));
+app.use('/blocs', require('./routes/blocs'));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
