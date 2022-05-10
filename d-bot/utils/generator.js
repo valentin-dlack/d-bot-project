@@ -1,4 +1,5 @@
 const fs = require('fs');
+const JSZip = require('jszip');
 //generate files for a discord bot
 
 function generate(bot_name, commands) {
@@ -23,17 +24,6 @@ function generate(bot_name, commands) {
             "ms": "^2.1.3",
         }
     };
-    let dir = `../temp/bot-${randomNumber}`;
-    if (!fs.existsSync(dir)){
-        fs.mkdirSync(dir, { recursive: true });
-    }
-
-    let botFile = JSON.stringify(bot_package, null, 2);
-    let botFilePath = `../temp/bot-${randomNumber}/package.json`;
-    fs.writeFile(botFilePath, botFile, function (err) {
-        if (err) throw err;
-        console.log('Saved!');
-    });
 
     // generate bot.js
     let botJs = `const { Client, Intents, Collection } = require('discord.js');
@@ -43,7 +33,7 @@ function generate(bot_name, commands) {
     client.commands = new Collection();
     const config = require('./config.json');
 
-    if (!config.token) return console.log('No token provided! Please put your token is config.json');
+    if (!config.token) console.log('No token provided! Please put your token is config.json');
 
     const functions = fs.readdirSync('./src/functions/').filter(file => file.endsWith('.js'));
     const eventsFiles = fs.readdirSync('./src/events/').filter(file => file.endsWith('.js'));
@@ -51,34 +41,160 @@ function generate(bot_name, commands) {
 
     (async () => {
         for (file of functions) {
-            require(\`./functions/\${file}\`)(client);
+            require(\`./src/functions/\${file}\`)(client);
         }
 
         client.handleEvents(eventsFiles, "./src/events");
         client.handleCommands(commandsFiles, "./src/commands");
         client.login(config.token);
     })()`;
-    let botJsPath = `../temp/bot-${randomNumber}/bot.js`;
-    fs.writeFile(botJsPath, botJs, function (err) {
-        if (err) throw err;
-        console.log('Saved!');
-    });
 
     // generate config.json
     let configJson = `{
         "token": "",
-        "prefix": "!"
+        "prefix": "!",
+        "guildId": ""
     }`;
-    let configJsonPath = `../temp/bot-${randomNumber}/config.json`;
-    fs.writeFile(configJsonPath, configJson, function (err) {
-        if (err) throw err;
-        console.log('Saved!');
-    });
 
     // generate fonctions/handleCommands.js
     let handleCommands = `
-    
-    `
+    const { REST } = require('@discordjs/rest');
+    const { Routes } = require('discord-api-types/v9');
+    const fs = require('fs');
+    const config = require('../../config.json');
+
+    const guildId = '\${config.guildId}';
+
+    if (!guildId) console.log('No guildId provided! Please put your guildId in config.json');
+
+    module.exports = (client) => {
+        client.handleCommands = (commandFolder, path) => {
+            client.commandArray = [];
+            for (folder of commandFolder) {
+                const commands = fs.readdirSync(path + '/' + folder).filter(file => file.endsWith('.js'));
+                for (file of commands) {
+                    const command = require('../commands/' + folder + '/' + file);
+                    client.commands.set(command.data.name, command);
+                    client.commandArray.push(command.data.toJSON());
+                }
+            }
+            const rest = new REST({ version: '9' }).setToken(config.token);
+
+            (async () => {
+                try {
+                    console.log('Started registering commands...');
+
+                    await rest.put(
+                        Routes.applicationGuildCommands(client.user.id, guildId), {
+                            body: client.commandArray
+                        },
+                    );
+
+                    console.log('Registered commands!');
+                } catch (e) {
+                    console.log('Error registering commands! ' + e);
+                }
+            })();
+        }
+    }`;
+
+    // generate functions/handleEvents.js
+    let handleEvents = `
+    module.exports = (client) => {
+        client.handleEvents = async(eventsFiles, path) => {
+            for (const file of eventsFiles) {
+                const event = require('../events/' + file);
+                if (event.once) {
+                    client.once(event.name, (...args) => event.execute(...args, client));
+                } else {
+                    client.on(event.name, (...args) => event.execute(...args, client));
+                }
+            }
+        }
+    }`;
+
+    let onReady = `
+    module.exports = {
+        name: 'ready',
+        once: true,
+        async execute(client) {
+            console.log('Bot is ready as \${client.user.tag}!');
+        }
+    }`;
+
+    // generate interaction create
+    let interactionCreate = `
+    module.exports = {
+        name: 'interactionCreate',
+        async execute(interaction, client) {
+            if (!interaction.isCommand()) return;
+
+            const command = client.commands.get(interaction.commandName);
+
+            if (!command) return;
+
+            try {
+                await command.execute(interaction);
+            } catch (e) {
+                console.log(e);
+                await interaction.reply({ content: 'An error occured while executing this command!', ephemeral: true });
+            }
+        }
+    }`;
+
+
+
+    let commandList = [];
+
+    //if commands is an array
+    if (Array.isArray(commands)) {
+
+        commands.forEach(command => {
+            //generate commands/[command].js
+            let commandJs = `
+            const { SlashCommandBuilder } = require('@discordjs/builders');
+
+            module.exports = {
+                data: new SlashCommandBuilder()
+                    .setName('${command.command}')
+                    .setDescription('${command.description}'),
+                async execute(interaction) {
+                    await interaction.reply('${command.return}');
+            `
+            commandList.push([commandJs, command.command]);
+        });
+    } else {
+        let commandJs = `
+            const { SlashCommandBuilder } = require('@discordjs/builders');
+
+            module.exports = {
+                data: new SlashCommandBuilder()
+                    .setName('${command.command}')
+                    .setDescription('${command.description}'),
+                async execute(interaction) {
+                    await interaction.reply('${command.return}');
+            `
+    }
+
+
+    // generate zip file
+    let zip = new JSZip();
+    zip.file('package.json', JSON.stringify(bot_package));
+    zip.file('bot.js', botJs);
+    zip.file('config.json', configJson);
+    zip.file('src/functions/handleCommands.js', handleCommands);
+    zip.file('src/functions/handleEvents.js', handleEvents);
+    zip.file('src/events/ready.js', onReady);
+    zip.file('src/commands/interactionCreate.js', interactionCreate);
+    zip.folder('src/commands');
+    zip.folder('src/events');
+    commandList.forEach(command => {
+        zip.file('src/commands/' + command[1] + '.js', command[0]);
+    });
+    zip.generateAsync({ type: 'nodebuffer' }).then(function (content) {
+        fs.writeFileSync(`../temp/bot-${randomNumber}.zip`, content);
+        console.log('Saved!');
+    });
 }
 
 module.exports = { generate };
