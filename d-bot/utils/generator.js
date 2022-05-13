@@ -2,7 +2,7 @@ const fs = require('fs');
 const JSZip = require('jszip');
 //generate files for a discord bot
 
-function generate(bot_name, commands) {
+function generate(bot_name, commands, desc, return_msg) {
     let randomNumber = Math.floor(Math.random() * 1000000000000);
     let formattedName = bot_name.replace(" ", '_');
     let bot_package = {
@@ -31,13 +31,13 @@ function generate(bot_name, commands) {
     const client = new Client({ disableMentions: 'everyone', intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_BANS] });
 
     client.commands = new Collection();
-    const config = require('./config.json');
+    const config = require('../config.json');
 
     if (!config.token) console.log('No token provided! Please put your token is config.json');
 
     const functions = fs.readdirSync('./src/functions/').filter(file => file.endsWith('.js'));
     const eventsFiles = fs.readdirSync('./src/events/').filter(file => file.endsWith('.js'));
-    const commandsFiles = fs.readdirSync('./src/commands/').filter(file => file.endsWith('.js'));
+    const commandFolders = fs.readdirSync('./src/commands');
 
     (async () => {
         for (file of functions) {
@@ -45,7 +45,7 @@ function generate(bot_name, commands) {
         }
 
         client.handleEvents(eventsFiles, "./src/events");
-        client.handleCommands(commandsFiles, "./src/commands");
+        client.handleCommands(commandFolders, "./src/commands");
         client.login(config.token);
     })()`;
 
@@ -63,17 +63,19 @@ function generate(bot_name, commands) {
     const fs = require('fs');
     const config = require('../../config.json');
 
-    const guildId = '\${config.guildId}';
+    const guildId = config.guildId;
+    const clientId = config.clientId;
 
     if (!guildId) console.log('No guildId provided! Please put your guildId in config.json');
+    if (!clientId) console.log('No clientId provided! Please put your clientId in config.json');
 
     module.exports = (client) => {
         client.handleCommands = (commandFolder, path) => {
             client.commandArray = [];
             for (folder of commandFolder) {
-                const commands = fs.readdirSync(path + '/' + folder).filter(file => file.endsWith('.js'));
+                const commands = fs.readdirSync(\`\${path}/\${folder}\`).filter(file => file.endsWith('.js'));
                 for (file of commands) {
-                    const command = require('../commands/' + folder + '/' + file);
+                    const command = require(\`../commands/\${folder}/\${file}\`);
                     client.commands.set(command.data.name, command);
                     client.commandArray.push(command.data.toJSON());
                 }
@@ -148,7 +150,6 @@ function generate(bot_name, commands) {
 
     //if commands is an array
     if (Array.isArray(commands)) {
-
         commands.forEach(command => {
             //generate commands/[command].js
             let commandJs = `
@@ -160,6 +161,8 @@ function generate(bot_name, commands) {
                     .setDescription('${command.description}'),
                 async execute(interaction) {
                     await interaction.reply('${command.return}');
+                }
+            }
             `
             commandList.push([commandJs, command.command]);
         });
@@ -169,23 +172,27 @@ function generate(bot_name, commands) {
 
             module.exports = {
                 data: new SlashCommandBuilder()
-                    .setName('${command.command}')
-                    .setDescription('${command.description}'),
+                    .setName('${commands}')
+                    .setDescription('${desc}'),
                 async execute(interaction) {
-                    await interaction.reply('${command.return}');
+                    await interaction.reply('${return_msg}');
+                }
+            }
             `
+            commandList.push([commandJs.trim(), commands]);
     }
+        
 
 
     // generate zip file
     let zip = new JSZip();
     zip.file('package.json', JSON.stringify(bot_package));
-    zip.file('bot.js', botJs);
+    zip.file('src/bot.js', botJs);
     zip.file('config.json', configJson);
     zip.file('src/functions/handleCommands.js', handleCommands);
     zip.file('src/functions/handleEvents.js', handleEvents);
     zip.file('src/events/ready.js', onReady);
-    zip.file('src/commands/interactionCreate.js', interactionCreate);
+    zip.file('src/events/interactionCreate.js', interactionCreate);
     zip.folder('src/commands');
     zip.folder('src/events');
     commandList.forEach(command => {

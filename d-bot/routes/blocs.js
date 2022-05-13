@@ -34,9 +34,11 @@ router.post('/new', (req, res) => {
     let bot_name = req.body.name;
     let description = req.body.content;
     let commands = req.body.command;
+    let desc = req.body.description;
+    let return_msg = req.body.return;
     let command = JSON.stringify(commands);
     let created_at = new Date();
-    f_gen.generate(bot_name, commands)
+    f_gen.generate(bot_name, commands, desc, return_msg);
     console.log(userId, name, description, command, created_at);
     connection.query('INSERT INTO blocs (userId, title, content, blocContent, created_at) VALUES (?, ?, ?, ?, ?)', [userId, name, description, command, created_at], function (err, rows, fields) {
         if (err) throw err;
