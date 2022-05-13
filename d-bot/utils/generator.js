@@ -2,7 +2,7 @@ const fs = require('fs');
 const JSZip = require('jszip');
 //generate files for a discord bot
 
-function generate(bot_name, commands, desc, return_msg) {
+function generate(bot_name, commands, desc, return_msg, category) {
     let randomNumber = Math.floor(Math.random() * 1000000000000);
     let formattedName = bot_name.replace(" ", '_');
     let bot_package = {
@@ -41,7 +41,7 @@ function generate(bot_name, commands, desc, return_msg) {
 
     (async () => {
         for (file of functions) {
-            require(\`./src/functions/\${file}\`)(client);
+            require(\`./functions/\${file}\`)(client);
         }
 
         client.handleEvents(eventsFiles, "./src/events");
@@ -53,7 +53,8 @@ function generate(bot_name, commands, desc, return_msg) {
     let configJson = `{
         "token": "",
         "prefix": "!",
-        "guildId": ""
+        "guildId": "",
+        "clientId": ""
     }`;
 
     // generate fonctions/handleCommands.js
@@ -87,7 +88,7 @@ function generate(bot_name, commands, desc, return_msg) {
                     console.log('Started registering commands...');
 
                     await rest.put(
-                        Routes.applicationGuildCommands(client.user.id, guildId), {
+                        Routes.applicationGuildCommands(clientId, guildId), {
                             body: client.commandArray
                         },
                     );
@@ -196,7 +197,7 @@ function generate(bot_name, commands, desc, return_msg) {
     zip.folder('src/commands');
     zip.folder('src/events');
     commandList.forEach(command => {
-        zip.file('src/commands/' + command[1] + '.js', command[0]);
+        zip.file('src/commands/' + category + "/" + command[1] + '.js', command[0]);
     });
     zip.generateAsync({ type: 'nodebuffer' }).then(function (content) {
         fs.writeFileSync(`../temp/bot-${randomNumber}.zip`, content);

@@ -60,6 +60,12 @@
         newCommand.innerHTML =
             `<input type="text" name="command" placeholder="Command" class="py-2 px-4 bg-white" required>
             <input type="text" name="description" placeholder="Description" class="py-2 px-4 bg-white" required>
+            <select name="category" class="py-2 px-4 bg-white" required>
+                <option value="utils">Utilitaire</option>
+                <option value="fun">Fun</option>
+                <option value="moderation">Moderation</option>
+                <option value="other">Other</option>
+            </select>
             <input type="text" name="return" placeholder="Return" class="py-2 px-4 bg-white" required>`;
 
         commandList.appendChild(newCommand);
