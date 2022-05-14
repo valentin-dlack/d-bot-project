@@ -5,6 +5,7 @@ const JSZip = require('jszip');
 const commandGenerator = require('./commandGen');
 
 function generate(bot_name, commands, desc, category, option_type, option_name, isRequired, action) {
+    console.log(action);
     let randomNumber = Math.floor(Math.random() * 1000000000000);
     let formattedName = bot_name.replace(" ", '_');
     let bot_package = {

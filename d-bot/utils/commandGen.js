@@ -1,4 +1,4 @@
-let generate = (command, desc, category, option_type, option_name, isRequired, action) => {
+let generate = (command, desc, option_type, option_name, isRequired, action) => {
     res = [];
     //chack if command is an array
     if (command.constructor === Array) {
@@ -14,19 +14,19 @@ let generate = (command, desc, category, option_type, option_name, isRequired, a
 
             if (option_type[index] === 'string') {
                 commandJs += `
-                    .addStringOption(option => option.setName('${option_name[index]}').setDescription('Put the wanted ${option_name[index]}').setRequired(${isRequired[index]})),
+                    .addStringOption(option => option.setName('${option_name[index]}').setDescription('Put the wanted ${option_name[index]}').setRequired(${isRequired[index] == 'Required' ? 'true' : 'false'})),
                 `;
             } else if (option_type[index] === 'user') {
                 commandJs += `
-                    .addUserOption(option => option.setName('${option_name[index]}').setDescription('Put the wanted ${option_name[index]}').setRequired(${isRequired[index]})),
+                    .addUserOption(option => option.setName('${option_name[index]}').setDescription('Put the wanted ${option_name[index]}').setRequired(${isRequired[index] == 'Required' ? 'true' : 'false'})),
                 `;
             } else if (option_type[index] === 'channel') {
                 commandJs += `
-                    .addChannelOption(option => option.setName('${option_name[index]}').setDescription('Put the wanted ${option_name[index]}').setRequired(${isRequired[index]})),
+                    .addChannelOption(option => option.setName('${option_name[index]}').setDescription('Put the wanted ${option_name[index]}').setRequired(${isRequired[index] == 'Required' ? 'true' : 'false'})),
                 `;
             } else if (option_type[index] === 'role') {
                 commandJs += `
-                    .addRoleOption(option => option.setName('${option_name[index]}').setDescription('Put the wanted ${option_name[index]}').setRequired(${isRequired[index]})),
+                    .addRoleOption(option => option.setName('${option_name[index]}').setDescription('Put the wanted ${option_name[index]}').setRequired(${isRequired[index] == 'Required' ? 'true' : 'false'})),
                 `;
             }
 
@@ -73,6 +73,7 @@ let generate = (command, desc, category, option_type, option_name, isRequired, a
 
         return res;
     } else {
+        console.log(action);
         let commandJs = `
         const { SlashCommandBuilder } = require('@discordjs/builders');
 
@@ -84,19 +85,19 @@ let generate = (command, desc, category, option_type, option_name, isRequired, a
 
         if (option_type === 'string') {
             commandJs += `
-                .addStringOption(option => option.setName('${option_name}').setDescription('Put the wanted ${option_name}').setRequired(${isRequired})),
+                .addStringOption(option => option.setName('${option_name}').setDescription('Put the wanted ${option_name}').setRequired(${isRequired == 'Required' ? 'true' : 'false'})),
             `;
         } else if (option_type === 'user') {
             commandJs += `
-                .addUserOption(option => option.setName('${option_name}').setDescription('Put the wanted ${option_name}').setRequired(${isRequired})),
+                .addUserOption(option => option.setName('${option_name}').setDescription('Put the wanted ${option_name}').setRequired(${isRequired == 'Required' ? 'true' : 'false'})),
             `;
         } else if (option_type === 'channel') {
             commandJs += `
-                .addChannelOption(option => option.setName('${option_name}').setDescription('Put the wanted ${option_name}').setRequired(${isRequired})),
+                .addChannelOption(option => option.setName('${option_name}').setDescription('Put the wanted ${option_name}').setRequired(${isRequired == 'Required' ? 'true' : 'false'})),
             `;
         } else if (option_type === 'role') {
             commandJs += `
-                .addRoleOption(option => option.setName('${option_name}').setDescription('Put the wanted ${option_name}').setRequired(${isRequired})),
+                .addRoleOption(option => option.setName('${option_name}').setDescription('Put the wanted ${option_name}').setRequired(${isRequired == 'Required' ? 'true' : 'false'})),
             `;
         }
 
@@ -142,3 +143,5 @@ let generate = (command, desc, category, option_type, option_name, isRequired, a
         return res;
     }
 }
+
+module.exports = {generate};
