@@ -47,13 +47,15 @@
     <div class="flex flex-wrap -mx-3 mb-6" id="commandList"></div>
     <div class="flex flex-wrap -mx-3 mb-6">
         <div class="w-full px-3">
-            <button class="px-4 py-2 rounded-md bg-blue-400 text-white hover:bg-blue-600" type="submit">Submit !</button>
+            <button class="px-4 py-2 rounded-md bg-blue-400 text-white hover:bg-blue-600" type="submit">Submit
+                !</button>
         </div>
     </div>
 </form>
 
 <script>
     const commandList = document.getElementById('commandList');
+    let commandNumber = 0;
 
     const addCommand = () => {
         const newCommand = document.createElement('div');
@@ -66,35 +68,41 @@
                 <option value="moderation">Moderation</option>
                 <option value="other">Other</option>
             </select>
-            <button class="px-4 py-2 rounded-md bg-blue-400 text-white hover:bg-blue-600" onclick="addTypeCommand()">Add Option</button>`;
+            <button class="px-4 py-2 rounded-md bg-blue-400 text-white hover:bg-blue-600" onclick="addTypeCommand()">Add Option</button><br>`;
 
         commandList.appendChild(newCommand);
+        commandNumber++;
     }
 
     const addTypeCommand = () => {
         const newTypeSelect = document.createElement('div');
         newTypeSelect.innerHTML =
-            `<select name="category" onchange="addAction(this)" class="py-2 px-4 bg-white" required>
+            `<select name="option_type" onchange="addAction(this)" class="py-2 px-4 bg-white" required>
                 <option value="string">String</option>
                 <option value="user">User</option>
                 <option value="role">Role</option>
                 <option value="channel">Channel</option>
                 <option value="none">None</option>
             </select>
-            <input type="text" name="description" placeholder="Command Name" class="py-2 px-4 bg-white" required>
-            <input type="checkbox" name="isRequired" class="py-2 px-4 bg-white text-white" required>Required</input>
-            <div name="action"></div>`;
+            <input type="text" name="option_name" placeholder="Option Name" class="py-2 px-4 bg-white" required>
+            <input type="checkbox" name="isRequired" class="py-2 px-4 bg-white text-white" required> Required ?</input>
+            <div id="actionList-${commandNumber}"></div>`;
 
-        
+
         commandList.appendChild(newTypeSelect);
     }
 
     const addAction = (select) => {
-        const newAction = document.querySelector('[name="action"]');
+        const commandName = document.querySelector('[name="option_name"]');
+        const commandRequired = document.querySelector('[name="isRequired"]');
+        const newAction = document.querySelector(`[id="actionList-${commandNumber}"]`);
+        commandName.removeAttribute('hidden');
+        commandRequired.removeAttribute('hidden');
+        commandRequired.value = "Required";
         if (select.value == "string") {
             newAction.innerHTML = `
             <select name="action" class="py-2 px-4 bg-white" required>
-                <option value="translate">Translate the string</option>
+                <option value="upper">Uppercase the string</option>
                 <option value="reverse">Reverse the string</option>
             </select>
             `;
@@ -140,6 +148,9 @@
         } else if (select.value == "none") {
             newAction.innerHTML = `
             <input type="text" name="action" placeholder="Text response" class="py-2 px-4 bg-white" required>`;
+            commandName.setAttribute("hidden", "hidden");
+            commandRequired.setAttribute("hidden", "hidden");
+            commandRequired.value = "";
         }
 
         commandList.appendChild(newAction);

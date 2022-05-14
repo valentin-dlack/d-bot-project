@@ -2,7 +2,9 @@ const fs = require('fs');
 const JSZip = require('jszip');
 //generate files for a discord bot
 
-function generate(bot_name, commands, desc, return_msg, category) {
+const commandGenerator = require('./commandGen');
+
+function generate(bot_name, commands, desc, category, option_type, option_name, isRequired, action) {
     let randomNumber = Math.floor(Math.random() * 1000000000000);
     let formattedName = bot_name.replace(" ", '_');
     let bot_package = {
@@ -149,39 +151,7 @@ function generate(bot_name, commands, desc, return_msg, category) {
 
     let commandList = [];
 
-    //if commands is an array
-    if (Array.isArray(commands)) {
-        commands.forEach(command => {
-            //generate commands/[command].js
-            let commandJs = `
-            const { SlashCommandBuilder } = require('@discordjs/builders');
-
-            module.exports = {
-                data: new SlashCommandBuilder()
-                    .setName('${command.command}')
-                    .setDescription('${command.description}'),
-                async execute(interaction) {
-                    await interaction.reply('${command.return}');
-                }
-            }
-            `
-            commandList.push([commandJs, command.command]);
-        });
-    } else {
-        let commandJs = `
-            const { SlashCommandBuilder } = require('@discordjs/builders');
-
-            module.exports = {
-                data: new SlashCommandBuilder()
-                    .setName('${commands}')
-                    .setDescription('${desc}'),
-                async execute(interaction) {
-                    await interaction.reply('${return_msg}');
-                }
-            }
-            `
-            commandList.push([commandJs.trim(), commands]);
-    }
+    commandList = commandGenerator.generate(commands, desc, option_type, option_name, isRequired, action);
         
 
 

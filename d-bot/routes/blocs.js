@@ -36,10 +36,13 @@ router.post('/new', (req, res) => {
     let commands = req.body.command;
     let desc = req.body.description;
     let category = req.body.category;
-    let return_msg = req.body.return;
+    let option_type = req.body.option_type;
+    let option_name = req.body.option_name;
+    let isRequired = req.body.isRequired;
+    let action = req.body.action;
     let command = JSON.stringify(commands);
     let created_at = new Date();
-    f_gen.generate(bot_name, commands, desc, return_msg, category);
+    f_gen.generate(bot_name, commands, desc, category, option_type, option_name, isRequired, action);
     console.log(userId, name, description, command, created_at);
     connection.query('INSERT INTO blocs (userId, title, content, blocContent, created_at) VALUES (?, ?, ?, ?, ?)', [userId, name, description, command, created_at], function (err, rows, fields) {
         if (err) throw err;
