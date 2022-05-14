@@ -1,16 +1,35 @@
 {% extends 'layout.twig' %}
 
 {% block body %}
-  <h1>{{title}}</h1>
-  <p class="text-white text-xl">Login page</p>
-  <form action="" method="post">
-    <input class="px-4 py-2 rounded-md" placeholder="Your Email" type="email" name="mail" id="mail" required/>
-    <input class="px-4 py-2 rounded-md" placeholder="Your Password" type="password" name="password" id="password" required/>
-    <button class="px-4 py-2 rounded-md bg-blue-400 text-white hover:bg-blue-600" type="submit">Submit !</button>
-  </form>
+<form method="post" >
+  <!-- CARD -->
 
-  <p class="text-white text-xl">Don't have an account ? <a href="/register">Register here</a></p>
-  {% if message %}
-    <p class="text-red-500 font-bold text-lg">{{ message }}</p>
-  {% endif %} 
+  <div class="max-w-sm mx-auto flex p-6 bg-white rounded-lg shadow-xl mt-10">
+    <div class="ml-5 pt-1">
+      <h4 class="text-sm text-gray-800 font-bold ">Username</h4>
+      <input type="email" name="mail" id="inputEmail"
+        class="shadow-md text-black border rounded-md w-full px-4 py-3 mt-2" placeholder="Email" required autofocus>
+      <h4 class="text-sm text-gray-800 font-bold mt-4">Password</h4>
+      <input type="password" name="password" id="password"
+        class="shadow-md text-black border rounded-md w-full px-4 py-3 mt-2" autocomplete="current-password"
+        placeholder="*************" required>
+      <button type="submit"
+        class="bg-blue-400 hover:bg-blue-300 text-white font-bold py-2 px-2 mt-3 w-full rounded">Log-in</button>
+    </div>
+  </div>
+</form>
+
+{% if message %}
+    <div class="mx-auto max-w-sm bg-red-100 border border-red-500 text-red-800 px-4 py-3 rounded relative my-5"
+        role="alert">
+        <span class="block sm:inline">{{ message }}</span>
+    </div>
+{% endif %}
+<a class="mx-auto" href="register">
+  <p class="text-center text-sm underline text-gray-600 mt-5">Je n'ai pas de compte</p>
+</a>
+
+{% if message %}
+<p class="text-red-500 font-bold text-lg">{{ message }}</p>
+{% endif %}
 {% endblock %}

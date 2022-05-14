@@ -50,4 +50,21 @@ router.post('/new', (req, res) => {
     });
 });
 
+router.get('/:id', (req, res) => {
+    let id = req.params.id;
+    connection.query('SELECT * FROM blocs WHERE id = ?', [id], function (err, rows, fields) {
+        if (err) throw err;
+        //get user that created the bloc
+        connection.query('SELECT * FROM users WHERE id = ?', [rows[0].userId], function (err, user, fields) {
+            if (err) throw err;
+            res.render('blocs/show', {
+                bloc: rows[0],
+                user: user[0],
+                viewer: req.user
+            });
+        }
+        );
+    });
+});
+
 module.exports = router;

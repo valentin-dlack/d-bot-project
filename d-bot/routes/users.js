@@ -57,6 +57,10 @@ router.post('/register', (req, res) => {
         });
       }
     });
+  } else {
+    res.render('users/register', {
+      e_message: 'Passwords do not match!'
+    });
   }
 })
 
