@@ -44,9 +44,7 @@ app.use(session({
   }
 }));
 
-console.log(path.join(__dirname, 'public'));
-
-app.use(express.static(path.join(__dirname, 'public')));
+console.log(path.join(__dirname, '/public'));
 
 app.use(flash());
 app.use(passport.initialize());
@@ -79,6 +77,8 @@ connection.connect((err) => {
   }
 });
 
+
+app.use(express.static(path.join(__dirname, '/public')));
 app.use('/', indexRouter);
 app.use('/', usersRouter);
 app.use('/profile', require('./routes/profile'));
