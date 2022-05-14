@@ -67,14 +67,13 @@ router.get('/:id', isAuthenticated, (req, res) => {
                 user: user[0],
                 viewer: req.user
             });
-        }
-        );
+        });
     });
 });
 
 router.get('/edit/:id', isAuthenticated, (req, res) => {
     let id = req.params.id;
-    csrf_token = ((Math.random() + 1).toString(34).substring(2)+(Math.random() + 1).toString(34).substring(2));
+    csrf_token = ((Math.random() + 1).toString(34).substring(2) + (Math.random() + 1).toString(34).substring(2));
     console.log(csrf_token);
     connection.query('SELECT * FROM blocs WHERE id = ?', [id], function (err, rows, fields) {
         if (err) throw err;
@@ -95,20 +94,16 @@ router.get('/edit/:id', isAuthenticated, (req, res) => {
 });
 
 router.post('/edit/:id', isAuthenticated, (req, res) => {
-    console.log(csrf_token);
-    console.log(req.body._token);
     let id = req.params.id;
     let name = req.body.title;
     let description = req.body.content;
 
     if (req.body._token === csrf_token) {
-        console.log('csrf_token is valid');
         connection.query('UPDATE blocs SET title = ?, content = ? WHERE id = ?', [name, description, id], function (err, rows, fields) {
             if (err) throw err;
             res.redirect('/blocs/' + id);
         });
     } else {
-        console.log('csrf_token is invalid');
         res.redirect('/');
     }
 });
@@ -134,9 +129,9 @@ router.get('/delete/:id', isAuthenticated, (req, res) => {
 
 function isAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
-      return next();
+        return next();
     }
     res.redirect('/login');
-} 
+}
 
 module.exports = router;
