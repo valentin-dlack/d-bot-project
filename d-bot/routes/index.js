@@ -11,10 +11,25 @@ const connection = mysql.createConnection({
 });
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/',isAuthenticated , function(req, res, next) {
     res.render('index', { 
       user: req.user,
+      isAdmin: req.user.roles.indexOf('admin') > -1
     });
 });
+
+function isAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/login');
+}
+
+function isAdmin(req, res, next) {
+  if (req.isAuthenticated() && req.user.roles.indexOf('admin') > -1) {
+    return next();
+  }
+  res.redirect('/login');
+}
 
 module.exports = router;

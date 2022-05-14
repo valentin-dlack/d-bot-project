@@ -17,7 +17,8 @@ router.get("/", isAuthenticated, function (req, res, next) {
     if (err) throw err;
     res.render("profile/index", {
       blocs: rows,
-      user: req.user
+      user: req.user,
+      isAdmin: req.user.roles.indexOf('admin') > -1
     });
   });
 });
@@ -50,7 +51,8 @@ router.get("/edit", isAuthenticated, function (req, res, next) {
     if (req.user.id == rows[0].id) {
       res.render("profile/edit", {
         user: rows[0],
-        csrf_token: csrf_token
+        csrf_token: csrf_token,
+        isAdmin: req.user.roles.indexOf('admin') > -1
       });
     }
   });
@@ -90,7 +92,8 @@ router.get("/password", isAuthenticated, function (req, res, next) {
     if (req.user.id == rows[0].id) {
       res.render("profile/password", {
         user: rows[0],
-        csrf_token: csrf_token
+        csrf_token: csrf_token,
+        isAdmin: req.user.roles.indexOf('admin') > -1
       });
     }
   });

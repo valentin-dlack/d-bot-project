@@ -20,7 +20,8 @@ router.get('/', (req, res) => {
         if (err) throw err;
         res.render('blocs/index', {
             blocs: rows,
-            user: req.user
+            user: req.user,
+            isAdmin: req.user.roles.indexOf('admin') > -1
         });
     });
 });
@@ -28,7 +29,8 @@ router.get('/', (req, res) => {
 //new bloc
 router.get('/new', isAuthenticated, (req, res) => {
     res.render('blocs/new.twig', {
-        user: req.user
+        user: req.user, 
+        isAdmin: req.user.roles.indexOf('admin') > -1
     });
 });
 
@@ -65,7 +67,8 @@ router.get('/:id', isAuthenticated, (req, res) => {
             res.render('blocs/show', {
                 bloc: rows[0],
                 user: user[0],
-                viewer: req.user
+                viewer: req.user,
+                isAdmin: req.user.roles.indexOf('admin') > -1
             });
         });
     });
@@ -84,7 +87,8 @@ router.get('/edit/:id', isAuthenticated, (req, res) => {
                 res.render('blocs/edit', {
                     bloc: rows[0],
                     user: user[0],
-                    csrf_token: csrf_token
+                    csrf_token: csrf_token,
+                    isAdmin: req.user.roles.indexOf('admin') > -1
                 });
             } else {
                 res.redirect('/blocs');

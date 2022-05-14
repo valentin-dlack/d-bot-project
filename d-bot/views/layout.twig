@@ -93,6 +93,11 @@
                           <a href="/logout"
                               class="block px-4 py-2 text-sm text-red-500 hover:underline" role="menuitem"
                               tabindex="-1" id="user-menu-item-2">Sign out</a>
+                          {% if isAdmin %}
+                          <a href="/admin"
+                              class="block px-4 py-2 text-sm text-gray-700 hover:underline decoration-red-600" role="menuitem"
+                              tabindex="-1" id="user-menu-item-2">Admin Panel</a>
+                          {% endif %}
                       </div>
                   </div>
               </div>
