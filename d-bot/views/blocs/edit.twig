@@ -1,0 +1,44 @@
+{% extends "layout.twig" %}
+
+{% block body %}
+
+<div>
+    <div class="max-w-full mx-10 lg:mx-64 my-10 px-4 pt-5 pb-12 bg-white rounded-lg shadow-lg">
+        <div class="float-right">
+            <p class="text-md font-thin">{{ bloc.created_at | date("m/d/Y G:i") }}</p>
+        </div>
+        <div class="float-left">
+            <p class="text-md font-thin">By {{ user.username }}</p>
+        </div>
+        <form action="" method="post">
+            <br>
+            <div>
+                <label for="title">Your Title</label>
+                <input type="text" id="title" name="title"
+                    class="shadow-md text-black border rounded-md w-max px-4 py-3 mt-2" placeholder="Title"
+                    value="{{bloc.title}}">
+            </div>
+            <div class="mt-3">
+                <label for="content">Your Content</label>
+                <textarea id="content" name="content" required="required"
+                    class="px-4 py-2 my-5 rounded border border-grey-light w-full h-64 focus:outline-none focus:border-indigo-500 text-base leading-6 font-medium text-gray-900"
+                    style="resize: none;" placeholder="Your new post !">
+                    {{bloc.content}}
+                </textarea>
+            </div>
+            <!-- cancel button on the right -->
+            <div class="float-right">
+                <a href="/blocs/{{bloc.id}}" class="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-2 mt-3 w-full rounded">Cancel</a>
+            </div>
+            <!-- submit button on the left -->
+            <div class="float-left">
+                <button type="submit"
+                    class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-2 w-full rounded">Submit</button>
+            </div>
+            <!-- csrf -->
+            <input type="hidden" name="_token" value="{{ csrf_token }}">
+        </form>
+    </div>
+</div>
+
+{% endblock %}

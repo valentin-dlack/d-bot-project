@@ -4,6 +4,8 @@ const passport = require('passport');
 const bcrypt = require('bcrypt');
 var router = express.Router();
 
+let csrf_token = '';
+
 const f_gen = require('../utils/generator.js');
 
 const connection = mysql.createConnection({
@@ -17,17 +19,20 @@ router.get('/', (req, res) => {
     connection.query('SELECT * FROM blocs', function (err, rows, fields) {
         if (err) throw err;
         res.render('blocs/index', {
-            blocs: rows
+            blocs: rows,
+            user: req.user
         });
     });
 });
 
 //new bloc
-router.get('/new', (req, res) => {
-    res.render('blocs/new.twig');
+router.get('/new', isAuthenticated, (req, res) => {
+    res.render('blocs/new.twig', {
+        user: req.user
+    });
 });
 
-router.post('/new', (req, res) => {
+router.post('/new', isAuthenticated, (req, res) => {
     console.log(req.body);
     let userId = req.user.id;
     let name = req.body.title;
@@ -50,7 +55,7 @@ router.post('/new', (req, res) => {
     });
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', isAuthenticated, (req, res) => {
     let id = req.params.id;
     connection.query('SELECT * FROM blocs WHERE id = ?', [id], function (err, rows, fields) {
         if (err) throw err;
@@ -66,5 +71,72 @@ router.get('/:id', (req, res) => {
         );
     });
 });
+
+router.get('/edit/:id', isAuthenticated, (req, res) => {
+    let id = req.params.id;
+    csrf_token = ((Math.random() + 1).toString(34).substring(2)+(Math.random() + 1).toString(34).substring(2));
+    console.log(csrf_token);
+    connection.query('SELECT * FROM blocs WHERE id = ?', [id], function (err, rows, fields) {
+        if (err) throw err;
+        //get user that created the bloc
+        connection.query('SELECT * FROM users WHERE id = ?', [rows[0].userId], function (err, user, fields) {
+            if (err) throw err;
+            if (user[0].id === req.user.id) {
+                res.render('blocs/edit', {
+                    bloc: rows[0],
+                    user: user[0],
+                    csrf_token: csrf_token
+                });
+            } else {
+                res.redirect('/blocs');
+            }
+        });
+    });
+});
+
+router.post('/edit/:id', isAuthenticated, (req, res) => {
+    console.log(csrf_token);
+    console.log(req.body._token);
+    let id = req.params.id;
+    let name = req.body.title;
+    let description = req.body.content;
+
+    if (req.body._token === csrf_token) {
+        console.log('csrf_token is valid');
+        connection.query('UPDATE blocs SET title = ?, content = ? WHERE id = ?', [name, description, id], function (err, rows, fields) {
+            if (err) throw err;
+            res.redirect('/blocs/' + id);
+        });
+    } else {
+        console.log('csrf_token is invalid');
+        res.redirect('/');
+    }
+});
+
+router.get('/delete/:id', isAuthenticated, (req, res) => {
+    let id = req.params.id;
+    connection.query('SELECT * FROM blocs WHERE id = ?', [id], function (err, rows, fields) {
+        if (err) throw err;
+        //get user that created the bloc
+        connection.query('SELECT * FROM users WHERE id = ?', [rows[0].userId], function (err, user, fields) {
+            if (err) throw err;
+            if (user[0].id === req.user.id) {
+                connection.query('DELETE FROM blocs WHERE id = ?', [id], function (err, rows, fields) {
+                    if (err) throw err;
+                    res.redirect('/blocs');
+                });
+            } else {
+                res.redirect('/blocs');
+            }
+        });
+    });
+});
+
+function isAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+      return next();
+    }
+    res.redirect('/login');
+} 
 
 module.exports = router;

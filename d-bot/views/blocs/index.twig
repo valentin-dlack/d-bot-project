@@ -5,16 +5,18 @@
 <h1 class="text-center text-white text-xl">All blocs</h1>
 
 {% for bloc in blocs %}
-<div class="bg-white rounded border mx-40 my-2 border-gray-400 shadow-md">
-    <h1 class="text-xl text-center text-gray-700">{{ bloc.title }}</h1>
-    <p class="text-gray-700 text-center">{{ bloc.content }}</p>
-    <pre class="bg-gray-400 border-2 border-black">
+<a href="/blocs/{{bloc.id}}">
+    <div class="bg-white rounded border mx-40 my-2 border-gray-400 shadow-md">
+        <h1 class="text-xl text-center text-gray-700">{{ bloc.title }}</h1>
+        <p class="text-gray-700 text-center">{{ bloc.content }}</p>
+        <pre class="bg-gray-400 border-2 border-black">
         <code>
             {{ bloc.blocContent | trim }}
         </code>
     </pre>
-    <p class="text-gray-700 text-center">{{ bloc.created_at | date("m/d/Y") }}</p>
-</div>
+        <p class="text-gray-700 text-center">{{ bloc.created_at | date("m/d/Y") }}</p>
+    </div>
+</a>
 {% endfor %}
 
 {% endblock %}
