@@ -58,7 +58,7 @@
     const addCommand = () => {
         const newCommand = document.createElement('div');
         newCommand.innerHTML =
-            `<input type="text" name="command" placeholder="Command" class="py-2 px-4 bg-white" required>
+            `<input type="text" name="command" placeholder="Command name" class="py-2 px-4 bg-white" required>
             <input type="text" name="description" placeholder="Description" class="py-2 px-4 bg-white" required>
             <select name="category" class="py-2 px-4 bg-white" required>
                 <option value="utils">Utilitaire</option>
@@ -66,9 +66,83 @@
                 <option value="moderation">Moderation</option>
                 <option value="other">Other</option>
             </select>
-            <input type="text" name="return" placeholder="Return" class="py-2 px-4 bg-white" required>`;
+            <button class="px-4 py-2 rounded-md bg-blue-400 text-white hover:bg-blue-600" onclick="addTypeCommand()">Add Option</button>`;
 
         commandList.appendChild(newCommand);
+    }
+
+    const addTypeCommand = () => {
+        const newTypeSelect = document.createElement('div');
+        newTypeSelect.innerHTML =
+            `<select name="category" onchange="addAction(this)" class="py-2 px-4 bg-white" required>
+                <option value="string">String</option>
+                <option value="user">User</option>
+                <option value="role">Role</option>
+                <option value="channel">Channel</option>
+                <option value="none">None</option>
+            </select>
+            <input type="text" name="description" placeholder="Command Name" class="py-2 px-4 bg-white" required>
+            <input type="checkbox" name="isRequired" class="py-2 px-4 bg-white text-white" required>Required</input>
+            <div name="action"></div>`;
+
+        
+        commandList.appendChild(newTypeSelect);
+    }
+
+    const addAction = (select) => {
+        const newAction = document.querySelector('[name="action"]');
+        if (select.value == "string") {
+            newAction.innerHTML = `
+            <select name="action" class="py-2 px-4 bg-white" required>
+                <option value="translate">Translate the string</option>
+                <option value="reverse">Reverse the string</option>
+            </select>
+            `;
+        } else if (select.value == "user") {
+            newAction.innerHTML = `
+            <select name="action" class="py-2 px-4 bg-white" required>
+                <option value="getUser">Get the user</option>
+                <option value="getUserId">Get the user id</option>
+                <option value="getUserName">Get the user name</option>
+                <option value="banUser">Ban the user</option>
+                <option value="unbanUser">Unban the user</option>
+                <option value="kickUser">Kick the user</option>
+                <option value="muteUser">Mute the user</option>
+                <option value="getUserDiscriminator">Get the user discriminator</option>
+                <option value="getUserAvatar">Get the user avatar</option>
+                <option value="getUserAvatarUrl">Get the user avatar url</option>
+                <option value="getUserStatus">Get the user status</option>
+                <option value="getUserGame">Get the user game</option>
+                <option value="getUserInfos">Get all the user infos</option>
+            </select>`;
+        } else if (select.value == "role") {
+            newAction.innerHTML = `
+            <select name="action" class="py-2 px-4 bg-white" required>
+                <option value="deleteRole">Delete the role</option>
+                <option value="editRole">Edit the role</option>
+                <option value="getRoleId">Get the role id</option>
+                <option value="getRoleName">Get the role name</option>
+                <option value="getRoleColor">Get the role color</option>
+                <option value="getRolePosition">Get the role position</option>
+                <option value="getRoleInfos">Get all the role infos</option>
+            </select>`;
+        } else if (select.value == "channel") {
+            newAction.innerHTML = `
+            <select name="action" class="py-2 px-4 bg-white" required>
+                <option value="getChannel">Get the channel</option>
+                <option value="deleteChannel">Edit the channel</option>
+                <option value="editChannel">Create the channel</option>
+                <option value="getChannelId">Get the channel id</option>
+                <option value="getChannelName">Get the channel name</option>
+                <option value="getChannelType">Get the channel type</option>
+                <option value="getChannelInfos">Get all the channel infos</option>
+            </select>`;
+        } else if (select.value == "none") {
+            newAction.innerHTML = `
+            <input type="text" name="action" placeholder="Text response" class="py-2 px-4 bg-white" required>`;
+        }
+
+        commandList.appendChild(newAction);
     }
 </script>
 

@@ -121,7 +121,7 @@ function generate(bot_name, commands, desc, return_msg, category) {
         name: 'ready',
         once: true,
         async execute(client) {
-            console.log('Bot is ready as \${client.user.tag}!');
+            console.log(\`Bot is ready as \${client.user.tag}!\`);
         }
     }`;
 
