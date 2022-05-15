@@ -22,7 +22,7 @@ router.get('/', (req, res) => {
         res.render('blocs/index', {
             blocs: rows,
             user: req.user,
-            isAdmin: req.user.roles.indexOf('admin') > -1
+            isAdmin: req.user ? req.user.roles.indexOf('admin') > -1 : false
         });
     });
 });
