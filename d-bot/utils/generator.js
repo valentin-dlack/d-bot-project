@@ -1,3 +1,4 @@
+const { path } = require('express/lib/application');
 const fs = require('fs');
 const JSZip = require('jszip');
 //generate files for a discord bot
@@ -170,10 +171,11 @@ function generate(bot_name, commands, desc, category, option_type, option_name, 
     commandList.forEach(command => {
         zip.file('src/commands/' + category + "/" + command[1] + '.js', command[0]);
     });
-    zip.generateAsync({ type: 'nodebuffer' }).then(function (content) {
-        fs.writeFileSync(`../temp/bot-${randomNumber}.zip`, content);
-        console.log('Saved!');
+    zip.generateAsync({ type: 'nodebuffer' }).then(content => {
+        fs.writeFileSync(`./public/temp/bot-${randomNumber}.zip`, content);
+        console.log('Generated bot.zip');
     });
+    return `/temp/bot-${randomNumber}.zip`;
 }
 
 module.exports = { generate };

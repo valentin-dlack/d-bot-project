@@ -23,11 +23,10 @@
                 </code>
             </pre>
         </div>
-        <p>{{user.id}} == {{viewer.id}} </p>
-        {% if post.files %}
+        {% if bloc.file %}
         <div class="mt-10 mb-2">
-            <a href="{{ asset('uploads/post/' ~ post.files) }}" class="px-4 py-2 border-2 border-gray-500 rounded"
-                download="image.png"><i class="fa-solid fa-download mr-2"></i> {{post.files}}</a>
+            <a href="{{bloc.file}}" class="px-4 py-2 border-2 border-gray-500 rounded"
+                download="bot.zip"><i class="fa-solid fa-download mr-2"></i> {{bloc.file}}</a>
         </div>
         {% endif %}
         {% if user.id == viewer.id %}

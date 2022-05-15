@@ -3,6 +3,7 @@ const mysql = require('mysql');
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 var router = express.Router();
+const fs = require('fs');
 
 let csrf_token = '';
 
@@ -49,9 +50,9 @@ router.post('/new', isAuthenticated, (req, res) => {
     let action = req.body.action;
     let command = JSON.stringify(commands);
     let created_at = new Date();
-    f_gen.generate(bot_name, commands, desc, category, option_type, option_name, isRequired, action);
-    console.log(userId, name, description, command, created_at);
-    connection.query('INSERT INTO blocs (userId, title, content, blocContent, created_at) VALUES (?, ?, ?, ?, ?)', [userId, name, description, command, created_at], function (err, rows, fields) {
+    let file_path = f_gen.generate(bot_name, commands, desc, category, option_type, option_name, isRequired, action);
+    console.log(userId, name, description, command, created_at, file_path);
+    connection.query('INSERT INTO blocs (userId, title, content, blocContent, created_at, file) VALUES (?, ?, ?, ?, ?, ?)', [userId, name, description, command, created_at, file_path], function (err, rows, fields) {
         if (err) throw err;
         res.redirect('/blocs');
     });
@@ -120,6 +121,7 @@ router.get('/delete/:id', isAuthenticated, (req, res) => {
         connection.query('SELECT * FROM users WHERE id = ?', [rows[0].userId], function (err, user, fields) {
             if (err) throw err;
             if (user[0].id === req.user.id) {
+                fs.unlinkSync(rows[0].file);
                 connection.query('DELETE FROM blocs WHERE id = ?', [id], function (err, rows, fields) {
                     if (err) throw err;
                     res.redirect('/blocs');
@@ -130,6 +132,16 @@ router.get('/delete/:id', isAuthenticated, (req, res) => {
         });
     });
 });
+
+//download bloc file
+// router.get('/download/:id', isAuthenticated, (req, res) => {
+//     let id = req.params.id;
+//     connection.query('SELECT * FROM blocs WHERE id = ?', [id], function (err, rows, fields) {
+//         if (err) throw err;
+
+//         res.download(rows[0].file);
+//     });
+// });
 
 function isAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
