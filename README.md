@@ -24,11 +24,11 @@ D'autre fonctionnalités sont à prévoir comme le partage de certains blocs/com
 - [X] Création du site web de base (routing, ect. No CSS) - 1 pts
 - [X] Mise en place et lien avec la BDD - 3 pts
 - [X] Login/Register + ~~Login avec les sites tiers~~ - 4 pts
-- [ ] HomePage, ProfilePage, AdminPage - 3 pts
-- [ ] Page de création *formulaires* (Seulement fonctionnel) - 4 pts
-- [ ] Export en ZIP - 3 pts
-- [ ] Style général du site - 1 pts
-- [ ] Partage des blocs crées par la commu (donc système de sauvegarde/CRUD) - 3 pts
+- [X] HomePage, ProfilePage, AdminPage - 3 pts
+- [X] Page de création *formulaires* (Seulement fonctionnel) - 4 pts
+- [X] Export en ZIP (le zip est corrompu) - 1 pts
+- [X] Style général du site - 1 pts
+- [X] Partage des blocs crées par la commu (donc système de sauvegarde/CRUD) - 3 pts
 - [ ] Intégration du style scratch - 6 pts
 
 Total de points : `33 pts`
