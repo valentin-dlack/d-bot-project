@@ -1,6 +1,7 @@
 var express = require('express');
 const mysql = require('mysql');
 const bcrypt = require('bcrypt');
+const fs = require('fs');
 var router = express.Router();
 
 const connection = mysql.createConnection({
@@ -20,6 +21,23 @@ router.get('/', isAuthenticated, isAdmin, function (req, res, next) {
                 user: req.user,
             });
         });
+    });
+});
+
+router.get('/delete/user/:id', isAuthenticated, isAdmin, function (req, res, next) {
+    let id = req.params.id;
+    connection.query('DELETE FROM users WHERE id = ?', [req.params.id], function (err, rows, fields) {
+        if (err) throw err;
+        res.redirect('/admin');
+    });
+});
+
+router.get('/delete/post/:id', isAuthenticated, isAdmin, function (req, res, next) {
+    let id = req.params.id;
+    connection.query('DELETE FROM blocs WHERE id = ?', [req.params.id], function (err, rows, fields) {
+        fs.unlinkSync("./public"+rows[0].file);
+        if (err) throw err;
+        res.redirect('/admin');
     });
 });
 

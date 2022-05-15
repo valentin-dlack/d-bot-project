@@ -135,6 +135,26 @@ router.post("/password", isAuthenticated, function (req, res, next) {
   }
 });
 
+router.get("/:id", isAuthenticated, function (req, res, next) {
+  let id = req.params.id;
+  if (id == req.user.id) {
+    res.redirect("/profile");
+    return
+  }
+  connection.query("SELECT * FROM blocs WHERE userId = ?", [id], function (err, rows, fields) {
+    if (err) throw err;
+    connection.query("SELECT * FROM users WHERE id = ?", [id], function (err, users, fields) {
+      if (err) throw err;
+      res.render("profile/show", {
+        blocs: rows,
+        user: req.user,
+        profile: users[0],
+        isAdmin: req.user.roles.indexOf('admin') > -1
+      });
+    });
+  });
+});
+
 function isAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();

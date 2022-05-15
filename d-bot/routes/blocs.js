@@ -121,7 +121,7 @@ router.get('/delete/:id', isAuthenticated, (req, res) => {
         connection.query('SELECT * FROM users WHERE id = ?', [rows[0].userId], function (err, user, fields) {
             if (err) throw err;
             if (user[0].id === req.user.id) {
-                fs.unlinkSync(rows[0].file);
+                fs.unlinkSync("./public"+rows[0].file);
                 connection.query('DELETE FROM blocs WHERE id = ?', [id], function (err, rows, fields) {
                     if (err) throw err;
                     res.redirect('/blocs');
