@@ -50,8 +50,30 @@ let generate = (command, desc, option_type, option_name, isRequired, action) => 
             }`;
             } else if (action[index].includes('getUser')) {
                 commandJs += `
-                    let user = interaction.options.getUser('${option_name[index]}');
-                    interaction.reply({ content: user.username });
+                    let user = interaction.options.getUser('${option_name[index]}');`;
+                    if (action[index].includes('getUserId')) {
+                        commandJs += `
+                        interaction.reply({ content: user.id });`;
+                    } else if (action[index].includes('getUserName')) {
+                        commandJs += `
+                        interaction.reply({ content: user.username });`;
+                    } else if (action[index].includes('getUserDiscriminator')) {
+                        commandJs += `
+                        interaction.reply({ content: user.discriminator });`;
+                    } else if (action[index].includes('getUserAvatarUrl')) {
+                        commandJs += `
+                        interaction.reply({ content: user.avatarURL({ format: 'png', dynamic: true, size: 256 })});`;
+                    } else if (action[index].includes('getUserStatus')) {
+                        commandJs += `
+                        interaction.reply({ content: user.presence.status });`;
+                    } else if (action[index].includes('getUserGame')) {
+                        commandJs += `
+                        interaction.reply({ content: user.presence.game });`;
+                    } else if (action[index].includes('getUserInfos')) {
+                        commandJs += `
+                        interaction.reply({ content: 'User infos: ' + user.id + ' ' + user.username + ' ' + user.discriminator + ' ' + user.avatarURL({ format: 'png', dynamic: true, size: 256 }) });`;
+                    }
+                commandJs += `
                 }
             }`;
             } else if (action[index].includes('getChannel')) {

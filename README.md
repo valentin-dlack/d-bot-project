@@ -79,7 +79,7 @@ Enfin, il suffit de lancer le serveur avec `npm run watch`.
 
 PS: Pour avoir un user admin, il faut ajouter un role 'admin' à l'utilisateur dans la base de donnée.
 
-PS 2 : Le download du zip marche mais le Zip est corrompu voilà déso :(
+PS 2 : Le download du zip marche mais le Zip est corrompu du coup il faut le prendre directement depuis `./d-bot/public/temp` :(
 
 ---
 
