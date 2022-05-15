@@ -76,6 +76,22 @@ let generate = (command, desc, option_type, option_name, isRequired, action) => 
                 commandJs += `
                 }
             }`;
+            } else if (action[index].includes('banUser')) {
+                commandJs += `
+                    let user = interaction.options.getUser('${option_name[index]}');
+                    user.ban(user, { reason: 'Banned by the bot' });
+                }}`;
+            } else if (action[index].includes('kickUser')) {
+                commandJs += `
+                    let user = interaction.options.getUser('${option_name[index]}');
+                    user.kick(user, { reason: 'Kicked by the bot' });
+                }}`;
+            } else if (action[index] === 'muteUser') {
+                commandJs += `
+                    let user = interaction.options.getUser('${option_name[index]}');
+                    user.addRole(user, 'Muted');
+                }
+                }`;
             } else if (action[index].includes('getChannel')) {
                 commandJs += `
                     let channel = interaction.options.getChannel('${option_name[index]}');
