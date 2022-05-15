@@ -7,6 +7,7 @@
   - [Base de donnée (Pour l'instant)](#base-de-donnée-pour-linstant)
   - [Modèle de donnée](#modèle-de-donnée)
   - [Comment installer](#comment-installer)
+  - [Install du bot](#install-du-bot)
   - [Crédits](#crédits)
 
 ## Idée principale (résumé)
@@ -80,6 +81,13 @@ Enfin, il suffit de lancer le serveur avec `npm run watch`.
 PS: Pour avoir un user admin, il faut ajouter un role 'admin' à l'utilisateur dans la base de donnée.
 
 PS 2 : Le download du zip marche mais le Zip est corrompu du coup il faut le prendre directement depuis `./d-bot/public/temp` :(
+
+## Install du bot
+
+- Décompressez le zip
+- Faites un npm install
+- Ajoutez les informations importantes dans le fichier `config.json` (token du bot, id du serveur ou il sera, id du bot)
+- Lancez le bot avec `node src/bot.js`
 
 ---
 
