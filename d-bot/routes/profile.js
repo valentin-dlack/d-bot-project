@@ -13,7 +13,8 @@ const connection = mysql.createConnection({
 let csrf_token = "";
 
 router.get("/", isAuthenticated, function (req, res, next) {
-  connection.query("SELECT * FROM blocs", function (err, rows, fields) {
+  let id = req.user.id
+  connection.query("SELECT * FROM blocs WHERE id = ?", [id], function (err, rows, fields) {
     if (err) throw err;
     res.render("profile/index", {
       blocs: rows,
